@@ -1,0 +1,36 @@
+name: Deploy Dockerized Flask App to Azure
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2: Log in to Azure Container Registry
+    - name: Log in to Azure Container Registry
+      uses: azure/docker-login@v1
+      with:
+        login-server: myacr.azurecr.io  # Replace with your ACR name
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+
+    # Step 3: Build and push Docker image
+    - name: Build and push Docker image
+      run: |
+        docker build -t myacr.azurecr.io/flask-app:latest .
+        docker push myacr.azurecr.io/flask-app:latest
+
+    # Step 4: Deploy to Azure Web App
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: '<YOUR_AZURE_WEBAPP_NAME>'  # Replace with your Web App name
+        images: 'myacr.azurecr.io/flask-app:latest'

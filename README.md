@@ -1,3 +1,11 @@
+### MEMBERS:
+
+Anas BELHAMRA
+Adam NAJIB
+Adnane MARBOUH
+Souhail ELKHALMADANI
+Hatim FAQDAOUI
+
 # Shop App API on Azure cloud
 
 This project demonstrates a simple application deployed on Azure using Terraform. Students will fork this repository to complete their assignments.
@@ -29,4 +37,3 @@ This project demonstrates a simple application deployed on Azure using Terraform
 2. Run tests using pytest
     ```bash
     pytest api/tests
-

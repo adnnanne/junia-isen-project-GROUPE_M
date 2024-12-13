@@ -1,3 +1,7 @@
 Flask==2.3.2
 Werkzeug==2.3.7
 pytest==7.4.0
+flask_sqlalchemy
+pyodbc
+azure-storage-blob
+python-dotenv

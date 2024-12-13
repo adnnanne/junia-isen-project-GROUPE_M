@@ -29,11 +29,20 @@ def get_all_orders():
     return render_template('admin_orders.html', orders=orders)
 
 @admin_bp.route('/admin/users', methods=['GET', 'POST'])
-def add_user():
+def manage_users():
     if request.method == 'POST':
         data = request.form
         hashed_password = generate_password_hash(data['password'], method='sha256')
         user = User(username=data['username'], password=hashed_password, role=data['role'])
         user.save()
         return jsonify({"message": "User added successfully"}), 201
-    return render_template('admin_users.html')
+    users = User.query.all()
+    return render_template('admin_users.html', users=users)
+
+@admin_bp.route('/admin/users/delete/<int:user_id>', methods=['POST'])
+def delete_user(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    user.delete()
+    return jsonify({"message": "User deleted successfully"}), 200

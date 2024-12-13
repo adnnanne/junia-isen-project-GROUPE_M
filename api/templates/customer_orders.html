@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/customer/dashboard">Online Shop</a>
+        <div class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/auth/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1 class="text-center">Orders</h1>
+        {% if message %}
+        <p class="text-center">{{ message }}</p>
+        {% else %}
+        <ul class="list-group">
+            {% for order in orders %}
+            <li class="list-group-item">
+                Order ID: {{ order.id }} - Status: {{ order.status }} - Items: {{ order.items }}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <a href="/customer/dashboard" class="btn btn-secondary mt-3">Back to Dashboard</a>
+    </div>
+</body>
+</html>

@@ -5,9 +5,11 @@ from routes.auth import auth_bp
 from routes.profile import profile_bp
 from routes.orders import orders_bp
 from routes.admin import admin_bp
+from routes.customer import customer_bp
 from models.database import init_db
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # Needed for session management
 init_db(app)
 
 # Register blueprints
@@ -17,6 +19,7 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(profile_bp)
 app.register_blueprint(orders_bp)
 app.register_blueprint(admin_bp)
+app.register_blueprint(customer_bp)
 
 @app.route('/')
 def home():

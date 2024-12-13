@@ -37,3 +37,4 @@ This project demonstrates a simple application deployed on Azure using Terraform
 2. Run tests using pytest
     ```bash
     pytest api/tests
+# Flask_app

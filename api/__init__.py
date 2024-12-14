@@ -32,7 +32,7 @@ def create_app():
         return Customer.query.get(int(id))
 
     from routes import views , auth , admin
-    from .models import Customer, Cart, Product, Order
+    from api.models import Customer, Cart, Product, Order
 
     app.register_blueprint(views, url_prefix='/') # localhost:5000/about-us
     app.register_blueprint(auth, url_prefix='/') # localhost:5000/auth/change-password

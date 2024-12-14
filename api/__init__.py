@@ -1,20 +1,38 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Initialize the database object
 db = SQLAlchemy()
-engine = create_engine("postgresql:///?User=postgres&Password=admin&Database=postgres&Server=127.0.0.1&Port=5432")
-DB_NAME = 'database.postgresql'
 
 def create_app():
     # Create a Flask application instance
     app = Flask(__name__)
 
     # Configure the app with the database URI and other settings
-    app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secure key
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'  # Database URI
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable unnecessary tracking of object modifications
+    
+    try:
+        app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')  # Secure secret key
+        # Gather database credentials from environment variables
+        db_user = os.getenv('DB_USER')
+        db_password = os.getenv('DB_PASSWORD')
+        db_host = os.getenv('DB_HOST')
+        db_port = os.getenv('DB_PORT', 5432)  # Default to 5432 if not specified
+        db_name = os.getenv('DB_NAME')
+        # Construct the database URI
+        app.config['SQLALCHEMY_DATABASE_URI'] = (
+        f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
+        )
+
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable unnecessary tracking of object modifications
+    except KeyError as e:
+        print(f"Error: {e}")
+    
 
     # Initialize the database with the app
     db.init_app(app)
@@ -38,6 +56,6 @@ def create_app():
 
     # Create the database if not created
     with app.app_context():
-        db.create_all()  # Ensure tables are created (you can comment this out once tables are created initially)
+        db.create_all()  # Ensure tables are created (comment this out once tables are created)
 
     return app

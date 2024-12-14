@@ -1,10 +1,8 @@
-from api import db
 from flask_login import UserMixin
 from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
+from api.__init__ import db  # This is valid now because the app context is ready when the app is created
 
-
-class Product(db.Model):
+class Product(db.Model):  # db is available here because app is initialized
     id = db.Column(db.Integer, primary_key=True)
     product_name = db.Column(db.String(100), nullable=False)
     current_price = db.Column(db.Float, nullable=False)
@@ -19,3 +17,4 @@ class Product(db.Model):
 
     def __str__(self):
         return '<Product %r>' % self.product_name
+

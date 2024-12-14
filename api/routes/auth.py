@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect
-from models.forms import LoginForm, SignUpForm, PasswordChangeForm
-from models import Customer
-from . import db
+from api.models.forms import LoginForm, SignUpForm, PasswordChangeForm
+from api.models import Customer
+from api.__init__ import db
 from flask_login import login_user, login_required, logout_user
 
 

@@ -4,7 +4,7 @@ from flask_login import LoginManager
 
 # Initialize the database object
 db = SQLAlchemy()
-DB_NAME = 'database.sqlite3'
+DB_NAME = 'database.postgresql'
 
 def create_app():
     # Create a Flask application instance

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, request, jsonify
-from models import Product, Cart, Order
+from api.models import Product, Cart, Order
 from flask_login import login_required, current_user
-from . import db
+from api import db
 from intasend import APIService
 
 

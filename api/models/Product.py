@@ -1,7 +1,6 @@
-from . import db
 from flask_login import UserMixin
 from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
+from api import db
 
 
 class Product(db.Model):

@@ -1,7 +1,8 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-
+from api.routes import views , auth , admin
+from api.models import Customer, Cart, Product, Order
 
 db = SQLAlchemy()
 DB_NAME = 'database.sqlite3'
@@ -31,8 +32,7 @@ def create_app():
     def load_user(id):
         return Customer.query.get(int(id))
 
-    from routes import views , auth , admin
-    from .models import Customer, Cart, Product, Order
+    
 
     app.register_blueprint(views, url_prefix='/') # localhost:5000/about-us
     app.register_blueprint(auth, url_prefix='/') # localhost:5000/auth/change-password

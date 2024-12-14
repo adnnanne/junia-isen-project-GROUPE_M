@@ -1,8 +1,7 @@
-from . import db
 from flask_login import UserMixin
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from api.__init__ import db
 
 class Customer(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)

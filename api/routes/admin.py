@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, flash, send_from_directory, redirect
 from flask_login import login_required, current_user
-from models.forms import ShopItemsForm, OrderForm
+from api.models.forms import ShopItemsForm, OrderForm
 from werkzeug.utils import secure_filename
-from models import Product, Order, Customer
-from . import db
+from api.models import Product, Order, Customer
+from api.__init__ import db
 
 
 admin = Blueprint('admin', __name__)

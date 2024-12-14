@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "product_name": "Laptop",
+        "current_price": 1200.99,
+        "previous_price": 1400.00,
+        "in_stock": 50,
+        "product_picture": "laptop.jpg",
+        "flash_sale": true,
+        "date_added": "2024-01-01T10:00:00Z"
+    },
+    {
+        "id": 2,
+        "product_name": "Smartphone",
+        "current_price": 699.99,
+        "previous_price": 899.99,
+        "in_stock": 150,
+        "product_picture": "smartphone.jpg",
+        "flash_sale": false,
+        "date_added": "2024-01-01T10:00:00Z"
+    },
+    {
+        "id": 3,
+        "product_name": "Headphones",
+        "current_price": 129.99,
+        "previous_price": 159.99,
+        "in_stock": 200,
+        "product_picture": "headphones.jpg",
+        "flash_sale": true,
+        "date_added": "2024-01-01T10:00:00Z"
+    },
+    {
+        "id": 4,
+        "product_name": "Smartwatch",
+        "current_price": 249.99,
+        "previous_price": 299.99,
+        "in_stock": 75,
+        "product_picture": "smartwatch.jpg",
+        "flash_sale": false,
+        "date_added": "2024-01-01T10:00:00Z"
+    }
+]

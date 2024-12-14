@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, flash, redirect, request, jsonify
 from models import Product, Cart, Order
 from flask_login import login_required, current_user
 from . import db
-from intasend import APIService
 
 
 views = Blueprint('views', __name__)
@@ -142,40 +141,42 @@ def remove_cart():
 @views.route('/place-order')
 @login_required
 def place_order():
-    customer_cart = Cart.query.filter_by(customer_link=current_user.id)
+    customer_cart = Cart.query.filter_by(customer_link=current_user.id).all()
     if customer_cart:
         try:
             total = 0
             for item in customer_cart:
                 total += item.product.current_price * item.quantity
 
-            service = APIService(token=API_TOKEN, publishable_key=API_PUBLISHABLE_KEY, test=True)
-            create_order_response = service.collect.mpesa_stk_push(phone_number='YOUR_NUMBER ', email=current_user.email,
-                                                                   amount=total + 200, narrative='Purchase of goods')
+            # Add a fixed fee (e.g., for delivery)
+            total += 200
 
+            # Create orders for each cart item
             for item in customer_cart:
                 new_order = Order()
                 new_order.quantity = item.quantity
                 new_order.price = item.product.current_price
-                new_order.status = create_order_response['invoice']['state'].capitalize()
-                new_order.payment_id = create_order_response['id']
+                new_order.status = 'Pending'  # Default status
+                new_order.payment_id = None  # No external payment ID needed
 
                 new_order.product_link = item.product_link
                 new_order.customer_link = item.customer_link
 
                 db.session.add(new_order)
 
+                # Update product stock
                 product = Product.query.get(item.product_link)
+                if product:
+                    product.in_stock -= item.quantity
 
-                product.in_stock -= item.quantity
-
+                # Remove item from cart
                 db.session.delete(item)
 
-                db.session.commit()
+            db.session.commit()
 
             flash('Order Placed Successfully')
-
             return redirect('/orders')
+
         except Exception as e:
             print(e)
             flash('Order not placed')

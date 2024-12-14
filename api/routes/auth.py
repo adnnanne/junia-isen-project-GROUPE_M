@@ -1,15 +1,16 @@
 from flask import Blueprint, render_template, flash, redirect
 from api.models.forms import LoginForm, SignUpForm, PasswordChangeForm
 from api.models import Customer
-from api.__init__ import db
+
 from flask_login import login_user, login_required, logout_user
 
 
 auth = Blueprint('auth', __name__)
 
 
-@auth.route('/sign-up', methods=['GET', 'POST'])
+@auth.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
+    from api.__init__ import db
     form = SignUpForm()
     if form.validate_on_submit():
         email = form.email.data
@@ -27,7 +28,7 @@ def sign_up():
                 db.session.add(new_customer)
                 db.session.commit()
                 flash('Account Created Successfully, You can now Login')
-                return redirect('/login')
+                return redirect('/auth/login')
             except Exception as e:
                 print(e)
                 flash('Account Not Created!!, Email already exists')
@@ -79,6 +80,7 @@ def profile(customer_id):
 @auth.route('/change-password/<int:customer_id>', methods=['GET', 'POST'])
 @login_required
 def change_password(customer_id):
+    from api.__init__ import db
     form = PasswordChangeForm()
     customer = Customer.query.get(customer_id)
     if form.validate_on_submit():

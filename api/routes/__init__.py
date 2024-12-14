@@ -1,3 +1,3 @@
-from .admin import *
-from .views import *
-from .auth import *
+from .views import views
+from .auth import auth
+from .admin import admin

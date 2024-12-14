@@ -1,7 +1,5 @@
 from flask import Blueprint, render_template, flash, redirect, request, jsonify
-from api.models import Product, Cart, Order
 from flask_login import login_required, current_user
-from app import db
 from intasend import APIService
 
 views = Blueprint('views', __name__)
@@ -13,6 +11,7 @@ API_TOKEN = 'YOUR_API_TOKEN'
 
 @views.route('/')
 def home():
+    from api.models import Product, Cart, Order
     items = Product.query.filter_by(flash_sale=True).all()
     cart = Cart.query.filter_by(customer_link=current_user.id).all() if current_user.is_authenticated else []
     return render_template('home.html', items=items, cart=cart)
@@ -21,6 +20,8 @@ def home():
 @views.route('/add-to-cart/<int:item_id>')
 @login_required
 def add_to_cart(item_id):
+    from app import db
+    from api.models import Product, Cart, Order
     item_to_add = Product.query.get(item_id)
     if not item_to_add:
         flash('Item does not exist.')
@@ -47,6 +48,7 @@ def add_to_cart(item_id):
 @views.route('/cart')
 @login_required
 def show_cart():
+    from api.models import  Cart
     cart = Cart.query.filter_by(customer_link=current_user.id).all()
     amount = sum(item.product.current_price * item.quantity for item in cart)
     return render_template('cart.html', cart=cart, amount=amount, total=amount + 200)
@@ -55,6 +57,8 @@ def show_cart():
 @views.route('/pluscart')
 @login_required
 def plus_cart():
+    from api.models import Cart
+    from app import db
     cart_id = request.args.get('cart_id')
     cart_item = Cart.query.get(cart_id)
     if not cart_item:
@@ -77,6 +81,8 @@ def plus_cart():
 @views.route('/minuscart')
 @login_required
 def minus_cart():
+    from app import db
+    from api.models import Cart
     cart_id = request.args.get('cart_id')
     cart_item = Cart.query.get(cart_id)
     if not cart_item:
@@ -101,6 +107,8 @@ def minus_cart():
 @views.route('/removecart')
 @login_required
 def remove_cart():
+    from app import db
+    from api.models import Cart
     cart_id = request.args.get('cart_id')
     cart_item = Cart.query.get(cart_id)
     if not cart_item:
@@ -122,6 +130,8 @@ def remove_cart():
 @views.route('/place-order')
 @login_required
 def place_order():
+    from app import db
+    from api.models import Product, Cart, Order
     customer_cart = Cart.query.filter_by(customer_link=current_user.id).all()
     if not customer_cart:
         flash('Your cart is empty.')
@@ -166,12 +176,14 @@ def place_order():
 @views.route('/orders')
 @login_required
 def order():
+    from api.models import  Order
     orders = Order.query.filter_by(customer_link=current_user.id).all()
     return render_template('orders.html', orders=orders)
 
 
 @views.route('/search', methods=['GET', 'POST'])
 def search():
+    from api.models import Product, Cart
     if request.method == 'POST':
         search_query = request.form.get('search', '')
         items = Product.query.filter(Product.product_name.ilike(f'%{search_query}%')).all()

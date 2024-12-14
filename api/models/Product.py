@@ -1,6 +1,6 @@
 from flask_login import UserMixin
 from datetime import datetime
-from api.__init__ import db  # This is valid now because the app context is ready when the app is created
+from api import db  # This is valid now because the app context is ready when the app is created
 
 class Product(db.Model):  # db is available here because app is initialized
     id = db.Column(db.Integer, primary_key=True)

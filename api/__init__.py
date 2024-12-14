@@ -4,6 +4,7 @@ from flask_login import LoginManager
 
 # Initialize the database object
 db = SQLAlchemy()
+engine = create_engine("postgresql:///?User=postgres&Password=admin&Database=postgres&Server=127.0.0.1&Port=5432")
 DB_NAME = 'database.postgresql'
 
 def create_app():

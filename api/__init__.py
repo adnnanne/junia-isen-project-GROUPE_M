@@ -28,6 +28,7 @@ def create_app():
         app.config['SQLALCHEMY_DATABASE_URI'] = (
             f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
         )
+        app.config['SQLALCHEMY_ECHO'] = True
 
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable unnecessary tracking of object modifications
     except KeyError as e:

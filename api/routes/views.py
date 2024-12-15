@@ -103,24 +103,44 @@ def minus_cart():
 @views.route('/removecart')
 @login_required
 def remove_cart():
-    
     from api.models import Cart
+    # Get the cart item ID from the request arguments
     cart_id = request.args.get('cart_id')
-    cart_item = Cart.query.get(cart_id)
-    if not cart_item:
-        return jsonify({'error': 'Cart item not found'}), 404
+    if not cart_id:
+        flash('Cart item ID is missing!')
+        return redirect('/cart')
 
-    db.session.delete(cart_item)
-    db.session.commit()
+    try:
+        # Fetch the cart item by ID
+        cart_item = Cart.query.get(cart_id)
 
-    cart = Cart.query.filter_by(customer_link=current_user.id).all()
-    amount = sum(item.product.current_price * item.quantity for item in cart)
+        # If the cart item doesn't exist, notify the user
+        if not cart_item:
+            flash('Cart item not found.')
+            return redirect('/cart')
 
-    data = {
-        'amount': amount,
-        'total': amount + 200
-    }
-    return jsonify(data)
+        # Remove the item from the cart and commit the transaction
+        db.session.delete(cart_item)
+        db.session.commit()
+
+        # Recalculate the total and amount for the cart
+        cart = Cart.query.filter_by(customer_link=current_user.id).all()
+        amount = sum(item.product.current_price * item.quantity for item in cart)
+
+        data = {
+            'amount': amount,
+            'total': amount + 200  # Assuming 200 is a fixed shipping fee or other costs
+        }
+
+        # Optionally, return a JSON response or redirect to the cart page
+        flash('Item removed from cart.')
+        return redirect('/cart')
+
+    except Exception as e:
+        # Handle any unexpected errors
+        print(f"Error removing item from cart: {e}")
+        flash('An error occurred while removing the item from the cart.')
+        return redirect('/cart')
 
 
 @views.route('/place-order')

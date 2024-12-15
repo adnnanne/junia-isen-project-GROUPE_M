@@ -33,7 +33,7 @@
                                 </div>
 
                                 <div class="d-flex justify-content-between">
-                                    <p class="mb-0"><span><strong>eu {{ item.product.current_price }}</strong></span></p>
+                                    <p class="mb-0"><span><strong>euro{{ item.product.current_price }}</strong></span></p>
                                     <a href="{{ url_for('views.remove_cart', cart_id=item.id) }}" class="remove-cart btn btn-sm btn-secondary mr-3" pid="{{ item.id }}">Remove</a>
 
                                 </div>

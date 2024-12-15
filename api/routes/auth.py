@@ -79,7 +79,6 @@ def profile(customer_id):
 @auth.route('/change-password/<int:customer_id>', methods=['GET', 'POST'])
 @login_required
 def change_password(customer_id):
-    from api.__init__ import db
     form = PasswordChangeForm()
     customer = Customer.query.get(customer_id)
     if form.validate_on_submit():
@@ -92,7 +91,7 @@ def change_password(customer_id):
                 customer.password = confirm_new_password
                 db.session.commit()
                 flash('Password Updated Successfully')
-                return redirect(f'/profile/{customer.id}')
+                return redirect(f'/auth/profile/{customer.id}')
             else:
                 flash('New Passwords do not match!!')
 

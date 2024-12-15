@@ -1,10 +1,10 @@
-from flask import Blueprint, render_template, flash, send_from_directory, redirect
+from flask import Blueprint, render_template, flash, send_from_directory, redirect, current_app
 from flask_login import login_required, current_user
 from api.models.forms import ShopItemsForm, OrderForm
 from werkzeug.utils import secure_filename
 from api.models import Product, Order, Customer
-from api.__init__ import db
-
+from api import db
+import os
 
 admin = Blueprint('admin', __name__)
 
@@ -31,8 +31,14 @@ def add_shop_items():
 
             file_name = secure_filename(file.filename)
 
-            file_path = f'./media/{file_name}'
+            # Create media directory if it doesn't exist
+            upload_folder = os.path.join(current_app.root_path, 'static', 'media')
+            if not os.path.exists(upload_folder):
+                os.makedirs(upload_folder)
 
+            file_path = os.path.join(upload_folder, file_name)
+
+            # Save the file to the server
             file.save(file_path)
 
             new_shop_item = Product()
@@ -42,7 +48,8 @@ def add_shop_items():
             new_shop_item.in_stock = in_stock
             new_shop_item.flash_sale = flash_sale
 
-            new_shop_item.product_picture = file_path
+            # Store the relative URL for the product image
+            new_shop_item.product_picture = f'/static/media/{file_name}'
 
             try:
                 db.session.add(new_shop_item)

@@ -25,15 +25,17 @@
                                 <h3>{{ item.product.product_name }}</h3>
                                 <div class="my-3">
                                     <label for="quantity">Quantity</label>
-                                    <a class="minus-cart btn" pid="{{item.id}}"><i class="fas fa-minus-square fa-lg"></i></a>
-                                    <span id="quantity">{{ item.quantity }}</span>
+                                    <a class="minus-cart btn" pid="{{ item.id }}"><i class="fas fa-minus-square fa-lg"></i></a>
+                                    <span id="quantity{{ item.id }}">{{ item.quantity }}</span>
                                     <a class="plus-cart btn " pid="{{ item.id }}"><i class="fas fa-plus-square fa-lg"></i></a>
+
 
                                 </div>
 
                                 <div class="d-flex justify-content-between">
                                     <p class="mb-0"><span><strong>Ksh {{ item.product.current_price }}</strong></span></p>
-                                    <a href="" class="remove-cart btn btn-sm btn-secondary mr-3 " pid="{{item.id}}">Remove</a>
+                                    <a href="{{ url_for('views.remove_cart', cart_id=item.id) }}" class="remove-cart btn btn-sm btn-secondary mr-3" pid="{{ item.id }}">Remove</a>
+
                                 </div>
                             </div>
                         </div>
@@ -70,7 +72,7 @@
 
                     </ul>
 
-                    <div class="d-grid"><a href="/place-order" class="btn btn-primary">Place Order</a></div>
+                    <div class="d-grid"><a href="{{ url_for('views.place_order') }}" class="btn btn-primary">Place Order</a></div>
 
                 </div>
             </div>

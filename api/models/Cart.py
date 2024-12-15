@@ -2,7 +2,7 @@ from api import db
 
 
 class Cart(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
     quantity = db.Column(db.Integer, nullable=False)
 
     customer_link = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)

@@ -1,51 +1,33 @@
-$('.plus-cart').click(function(){
-    console.log('Button clicked')
 
-    var id = $(this).attr('pid').toString()
-    var quantity = this.parentNode.children[2]
+$(document).ready(function() {
+    // Handle quantity increase
+    $('.plus-cart').on('click', function() {
+        var cart_id = $(this).attr('pid');
+        $.ajax({
+            url: '/pluscart?cart_id=' + cart_id,
+            method: 'GET',
+            success: function(response) {
+                $('#quantity' + cart_id).text(response.quantity);
+                $('#amount').text(response.amount);
+                $('#totalamount').text(response.total);
+            }
+        });
+    });
 
-    $.ajax({
-        type: 'GET',
-        url: '/pluscart',
-        data: {
-            cart_id: id
-        },
-        
-        success: function(data){
-            console.log(data)
-            quantity.innerText = data.quantity
-            document.getElementById(`quantity${id}`).innerText = data.quantity
-            document.getElementById('amount_tt').innerText = data.amount
-            document.getElementById('totalamount').innerText = data.total
-
-        }
-    })
-})
-
-
-$('.minus-cart').click(function(){
-    console.log('Button clicked')
-
-    var id = $(this).attr('pid').toString()
-    var quantity = this.parentNode.children[2]
-
-    $.ajax({
-        type: 'GET',
-        url: '/minuscart',
-        data: {
-            cart_id: id
-        },
-        
-        success: function(data){
-            console.log(data)
-            quantity.innerText = data.quantity
-            document.getElementById(`quantity${id}`).innerText = data.quantity
-            document.getElementById('amount_tt').innerText = data.amount
-            document.getElementById('totalamount').innerText = data.total
-
-        }
-    })
-})
+    // Handle quantity decrease
+    $('.minus-cart').on('click', function() {
+        var cart_id = $(this).attr('pid');
+        $.ajax({
+            url: '/minuscart?cart_id=' + cart_id,
+            method: 'GET',
+            success: function(response) {
+                $('#quantity' + cart_id).text(response.quantity);
+                $('#amount').text(response.amount);
+                $('#totalamount').text(response.total);
+            }
+        });
+    });
+});
 
 
 $('.remove-cart').click(function(){

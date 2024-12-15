@@ -3,14 +3,13 @@ from api.models.forms import LoginForm, SignUpForm, PasswordChangeForm
 from api.models import Customer
 
 from flask_login import login_user, login_required, logout_user
-
+from api import db
 
 auth = Blueprint('auth', __name__)
 
 
 @auth.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
-    from api.__init__ import db
     form = SignUpForm()
     if form.validate_on_submit():
         email = form.email.data

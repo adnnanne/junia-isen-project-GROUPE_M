@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from api import db
 
 class Customer(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
     email = db.Column(db.String(100), unique=True)
     username = db.Column(db.String(100))
     password_hash = db.Column(db.String(150))

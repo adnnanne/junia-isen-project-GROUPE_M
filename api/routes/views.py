@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, request, jsonify
 from flask_login import login_required, current_user
 from intasend import APIService
-
+from api import db
 views = Blueprint('views', __name__)
 
 # Replace with actual keys
@@ -20,7 +20,7 @@ def home():
 @views.route('/add-to-cart/<int:item_id>')
 @login_required
 def add_to_cart(item_id):
-    from app import db
+    
     from api.models import Product, Cart, Order
     item_to_add = Product.query.get(item_id)
     if not item_to_add:
@@ -58,7 +58,7 @@ def show_cart():
 @login_required
 def plus_cart():
     from api.models import Cart
-    from app import db
+    
     cart_id = request.args.get('cart_id')
     cart_item = Cart.query.get(cart_id)
     if not cart_item:
@@ -81,7 +81,6 @@ def plus_cart():
 @views.route('/minuscart')
 @login_required
 def minus_cart():
-    from app import db
     from api.models import Cart
     cart_id = request.args.get('cart_id')
     cart_item = Cart.query.get(cart_id)
@@ -89,10 +88,7 @@ def minus_cart():
         return jsonify({'error': 'Cart item not found'}), 404
 
     cart_item.quantity = max(0, cart_item.quantity - 1)
-    if cart_item.quantity == 0:
-        db.session.delete(cart_item)
     db.session.commit()
-
     cart = Cart.query.filter_by(customer_link=current_user.id).all()
     amount = sum(item.product.current_price * item.quantity for item in cart)
 
@@ -107,7 +103,7 @@ def minus_cart():
 @views.route('/removecart')
 @login_required
 def remove_cart():
-    from app import db
+    
     from api.models import Cart
     cart_id = request.args.get('cart_id')
     cart_item = Cart.query.get(cart_id)
@@ -130,7 +126,7 @@ def remove_cart():
 @views.route('/place-order')
 @login_required
 def place_order():
-    from app import db
+    
     from api.models import Product, Cart, Order
     customer_cart = Cart.query.filter_by(customer_link=current_user.id).all()
     if not customer_cart:

@@ -28,14 +28,11 @@ def create_app():
         app.config['SQLALCHEMY_DATABASE_URI'] = (
             f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
         )
-        app.config['SQLALCHEMY_ECHO'] = True
-
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable unnecessary tracking of object modifications
     except KeyError as e:
         print(f"Error: {e}")
 
-    # Initialize the database with the app
-    db.init_app(app)
+    
 
     # Initialize Flask-Login
     login_manager = LoginManager()
@@ -53,7 +50,8 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/auth')
     app.register_blueprint(admin, url_prefix='/admin')
-
+    # Initialize the database with the app
+    db.init_app(app)
     # Test database connection
     test_db_connection(app)
 
@@ -80,7 +78,7 @@ def test_db_connection(app):
             user=db_user,
             password=db_password,
             database=db_name,
-            sslmode='require'  # Use SSL if needed for Azure PostgreSQL
+            
         )
         cursor = conn.cursor()
         cursor.execute("SELECT version();")

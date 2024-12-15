@@ -4,35 +4,31 @@
         "email": "john.doe@example.com",
         "username": "JohnDoe",
         "password_hash": "hashed_password_1",
-        "date_joined": "2024-01-01T10:00:00Z",
-        "cart_items": [],
-        "orders": []
+        "date_joined": "2024-01-01T10:00:00Z"
+        
     },
     {
         "id": 2,
         "email": "jane.smith@example.com",
         "username": "JaneSmith",
         "password_hash": "hashed_password_2",
-        "date_joined": "2024-01-01T10:00:00Z",
-        "cart_items": [],
-        "orders": []
+        "date_joined": "2024-01-01T10:00:00Z"
+        
     },
     {
         "id": 3,
         "email": "alice.wonderland@example.com",
         "username": "AliceWonder",
         "password_hash": "hashed_password_3",
-        "date_joined": "2024-01-01T10:00:00Z",
-        "cart_items": [],
-        "orders": []
+        "date_joined": "2024-01-01T10:00:00Z"
+        
     },
     {
         "id": 4,
         "email": "bob.builder@example.com",
         "username": "BobBuilder",
         "password_hash": "hashed_password_4",
-        "date_joined": "2024-01-01T10:00:00Z",
-        "cart_items": [],
-        "orders": []
+        "date_joined": "2024-01-01T10:00:00Z"
+        
     }
 ]

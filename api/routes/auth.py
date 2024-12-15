@@ -77,10 +77,6 @@ def profile(customer_id):
 @auth.route('/change-password/<int:customer_id>', methods=['GET', 'POST'])
 @login_required
 def change_password(customer_id):
-    if customer_id != current_user.id:
-        flash("Unauthorized access.", "danger")
-        return redirect(url_for('auth.profile', customer_id=current_user.id))
-
     form = PasswordChangeForm()
     if form.validate_on_submit():
         current_password = form.current_password.data
@@ -91,8 +87,8 @@ def change_password(customer_id):
             if new_password == confirm_new_password:
                 current_user.password = generate_password_hash(new_password)
                 db.session.commit()
-                flash("Password updated successfully.", "success")
-                return redirect(url_for('auth.profile', customer_id=current_user.id))
+                flash('Password Updated Successfully')
+                return redirect(f'/auth/profile/{customer.id}')
             else:
                 flash("New passwords do not match.", "danger")
         else:

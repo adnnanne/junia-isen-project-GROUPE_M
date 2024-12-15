@@ -31,14 +31,12 @@ def add_shop_items():
 
             file_name = secure_filename(file.filename)
 
-            # Create media directory if it doesn't exist
             upload_folder = os.path.join(current_app.root_path, 'static', 'media')
             if not os.path.exists(upload_folder):
                 os.makedirs(upload_folder)
 
             file_path = os.path.join(upload_folder, file_name)
 
-            # Save the file to the server
             file.save(file_path)
 
             new_shop_item = Product()
@@ -48,7 +46,6 @@ def add_shop_items():
             new_shop_item.in_stock = in_stock
             new_shop_item.flash_sale = flash_sale
 
-            # Store the relative URL for the product image
             new_shop_item.product_picture = f'/static/media/{file_name}'
 
             try:

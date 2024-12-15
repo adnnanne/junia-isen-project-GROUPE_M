@@ -1,0 +1,124 @@
+#home-cube {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #20D489;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.3s ease;
+}
+
+#home-cube .home-link {
+    text-decoration: none;
+    color: white;
+    font-size: 24px;
+}
+
+#home-cube:hover {
+    transform: scale(1.1);
+    background-color: #18b37b;
+}
+
+#home-cube i {
+    font-size: 24px;
+}
+
+
+
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Form Container */
+.base .base-content {
+    text-align: center;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 350px;
+}
+
+.base .form h3 {
+    font-size: 24px;
+    color: #FF723A;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.base .form .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.base .form .form-group label {
+    font-size: 16px;
+    color: #FF723A;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.base .form .form-control {
+    width: 100%;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid #FF723A;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+}
+
+.base .form .form-control:focus {
+    border-color: #20D489;
+}
+
+.base .buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.base .buttons a {
+    text-decoration: none;
+    color: #FF723A;
+    font-size: 14px;
+}
+
+.base .buttons .btn-submit {
+    background: #20D489;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.base .buttons .btn-submit:hover {
+    background: transparent;
+    border: 1px solid #20D489;
+    color: #20D489;
+}

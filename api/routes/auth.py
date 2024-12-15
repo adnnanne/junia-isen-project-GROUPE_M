@@ -1,38 +1,98 @@
-from flask import Blueprint, request, jsonify, redirect, url_for, render_template, session
-from models.users import User
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Blueprint, render_template, flash, redirect, url_for
+from api.models.forms import LoginForm, SignUpForm, PasswordChangeForm
+from api.models import Customer
+from flask_login import login_user, login_required, logout_user, current_user
+from werkzeug.security import check_password_hash, generate_password_hash
+from api import db
 
-auth_bp = Blueprint('auth', __name__)
+auth = Blueprint('auth', __name__)
 
-@auth_bp.route('/auth/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        data = request.form
-        hashed_password = generate_password_hash(data['password'], method='sha256')
+@auth.route('/sign_up', methods=['GET', 'POST'])
+def sign_up():
+    form = SignUpForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        username = form.username.data
+        password1 = form.password1.data
+        password2 = form.password2.data
 
-        user = User(username=data['username'], password=hashed_password, role="customer")
-        user.save()
+        if password1 == password2:
+            new_customer = Customer()
+            new_customer.email = email
+            new_customer.username = username
+            new_customer.password = generate_password_hash(password2)
 
-        return redirect(url_for('home'))
-    return render_template('register.html')
+            try:
+                db.session.add(new_customer)
+                db.session.commit()
+                flash('Account Created Successfully, You can now Login', "success")
+                return redirect(url_for('auth.login'))
+            except Exception as e:
+                print(e)
+                flash('Account Not Created! Email already exists.', "danger")
 
-@auth_bp.route('/auth/login', methods=['GET', 'POST'])
+        form.email.data = ''
+        form.username.data = ''
+        form.password1.data = ''
+        form.password2.data = ''
+
+    return render_template('signup.html', form=form)
+
+
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        data = request.form
-        user = User.query.filter_by(username=data['username']).first()
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
 
-        if user and check_password_hash(user.password, data['password']):
-            session['user_id'] = user.id
-            session['role'] = user.role
-            if user.role == "admin":
-                return redirect(url_for('admin_dashboard'))
-            return redirect(url_for('customer_dashboard'))
-        return jsonify({"error": "Invalid credentials"}), 401
-    return render_template('login.html')
+        customer = Customer.query.filter_by(email=email).first()
 
-@auth_bp.route('/auth/logout')
-def logout():
-    session.pop('user_id', None)
-    session.pop('role', None)
-    return redirect(url_for('home'))
+        if customer and check_password_hash(customer.password, password=password):
+            login_user(customer)
+            return redirect('/')
+        else:
+            print(customer.verify_password(password))
+            flash('Incorrect Email or Password', "danger")
+
+    return render_template('login.html', form=form)
+
+
+@auth.route('/logout', methods=['GET', 'POST'])
+@login_required
+def log_out():
+    logout_user()
+    return redirect('/')
+
+
+@auth.route('/profile/<int:customer_id>')
+@login_required
+def profile(customer_id):
+    if customer_id != current_user.id:
+        flash("Unauthorized access.", "danger")
+        return redirect(url_for('auth.profile', customer_id=current_user.id))
+
+    return render_template('profile.html', customer=current_user)
+
+
+@auth.route('/change-password/<int:customer_id>', methods=['GET', 'POST'])
+@login_required
+def change_password(customer_id):
+    form = PasswordChangeForm()
+    if form.validate_on_submit():
+        current_password = form.current_password.data
+        new_password = form.new_password.data
+        confirm_new_password = form.confirm_new_password.data
+
+        if check_password_hash(current_user.password, current_password):
+            if new_password == confirm_new_password:
+                current_user.password = generate_password_hash(new_password)
+                db.session.commit()
+                flash('Password Updated Successfully')
+                return redirect(f'/auth/profile/{current_user.id}')
+            else:
+                flash("New passwords do not match.", "danger")
+        else:
+            flash("Current password is incorrect.", "danger")
+
+    return render_template('change_password.html', form=form)

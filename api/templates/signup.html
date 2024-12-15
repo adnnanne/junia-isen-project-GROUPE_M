@@ -1,0 +1,46 @@
+{% extends 'forms.html' %}
+
+{% block title %} Sign Up {% endblock %}
+
+{% block body %}
+
+<!-- Sign Up Section -->
+<section class="base" id="base-signup">
+    <div class="base-content">
+        <div class="form">
+            <h3>Join Us <br> Create Your Account</h3>
+            
+            <hr class="divider">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    {{ form.email(class="form-control") }}
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    {{ form.username(class="form-control") }}
+                </div>
+
+                <div class="form-group">
+                    <label for="password1">Password</label>
+                    {{ form.password1(class="form-control") }}
+                </div>
+
+                <div class="form-group">
+                    <label for="password2">Confirm Password</label>
+                    {{ form.password2(class="form-control") }}
+                </div>
+
+                <div class="buttons">
+                    <a href="{{ url_for('auth.login') }}">Back to Login</a>
+                    {{ form.submit(class="btn btn-submit") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,9 +1,8 @@
-CREATE TABLE baskets (
-    id INT NOT NULL,
-    user_id INT NOT NULL,
-    product_id INT NOT NULL,
-    quantity INT NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES User(id),
-    FOREIGN KEY (product_id) REFERENCES Product(id)
-)
+CREATE TABLE cart (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    quantity INTEGER NOT NULL,
+    customer_link INTEGER NOT NULL,
+    product_link INTEGER NOT NULL,
+    FOREIGN KEY (customer_link) REFERENCES customer (id),
+    FOREIGN KEY (product_link) REFERENCES product (id)
+);

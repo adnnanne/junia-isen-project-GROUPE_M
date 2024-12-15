@@ -1,0 +1,7 @@
+CREATE TABLE customer (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email VARCHAR(100) UNIQUE,
+    username VARCHAR(100),
+    password_hash VARCHAR(150),
+    date_joined DATETIME DEFAULT CURRENT_TIMESTAMP
+);

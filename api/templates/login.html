@@ -4,32 +4,33 @@
 
 {% block body %}
 
-<!-- Login section start -->
-
-<section class="base" id="base-signup">
+<!-- Login Section -->
+<section class="base" id="base-login">
     <div class="base-content">
         <div class="form">
-            <h3>
-                Login to start <br> Shopping
-            </h3>
+            <h3>Welcome Back! <br> Please Login</h3>
             
-            <hr class="first">
+            <hr class="divider">
             <form method="POST">
                 {{ form.hidden_tag() }}
 
-                <div class="email"><h4>Email Address</h4>{{ form.email }} <hr></div>
-                <div class="password"><h4>Password</h4>{{ form.password }} <hr></div>
-
-                <div class="buttons">
-                    <a href="{{ url_for('auth.sign_up') }}"> Sign Up</a>
-                    {{ form.submit() }}
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    {{ form.email(class="form-control") }}
                 </div>
 
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    {{ form.password(class="form-control") }}
+                </div>
 
+                <div class="buttons">
+                    <a href="{{ url_for('auth.sign_up') }}">Create Account</a>
+                    {{ form.submit(class="btn btn-submit") }}
+                </div>
             </form>
         </div>
     </div>
 </section>
-
 
 {% endblock %}

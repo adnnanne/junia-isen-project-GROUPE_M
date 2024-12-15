@@ -16,10 +16,18 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
 
-    <title>Amazon | {% block title %} {% endblock %}</title>
+    <title> Bazario  | {% block title %} {% endblock %}</title>
 </head>
 
 <body>
+
+    <!-- Home Cube -->
+    <div id="home-cube">
+        <a href="{{ url_for('home') }}" class="home-link">
+            <i class="fas fa-home"></i>
+        </a>
+    </div>
+
     {% for message in get_flashed_messages() %}
 
     <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 5px;">

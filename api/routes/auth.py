@@ -48,10 +48,11 @@ def login():
 
         customer = Customer.query.filter_by(email=email).first()
 
-        if customer and customer.verify_password(password):
+        if customer and check_password_hash(customer.password, password=password):
             login_user(customer)
             return redirect('/')
         else:
+            print(customer.verify_password(password))
             flash('Incorrect Email or Password', "danger")
 
     return render_template('login.html', form=form)

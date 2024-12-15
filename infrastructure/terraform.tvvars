@@ -1,0 +1,7 @@
+prefix             = "shop"
+resource_group_name = "shop-app-rg"
+location           = "East US"
+admin_username     = "myadminusername"
+admin_password     = "myadminpassword"
+sql_server_name    = "shop-sql-server"
+sql_database_name  = "shopdb"

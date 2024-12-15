@@ -4,7 +4,6 @@ from intasend import APIService
 from api import db
 views = Blueprint('views', __name__)
 
-# Replace with actual keys
 API_PUBLISHABLE_KEY = 'YOUR_PUBLISHABLE_KEY'
 API_TOKEN = 'YOUR_API_TOKEN'
 
@@ -51,7 +50,7 @@ def show_cart():
     from api.models import  Cart
     cart = Cart.query.filter_by(customer_link=current_user.id).all()
     amount = sum(item.product.current_price * item.quantity for item in cart)
-    return render_template('cart.html', cart=cart, amount=amount, total=amount + 200)
+    return render_template('cart.html', cart=cart, amount=amount, total=amount + 2)
 
 
 @views.route('/pluscart')
@@ -73,7 +72,7 @@ def plus_cart():
     data = {
         'quantity': cart_item.quantity,
         'amount': amount,
-        'total': amount + 200
+        'total': amount + 2
     }
     return jsonify(data)
 
@@ -95,7 +94,7 @@ def minus_cart():
     data = {
         'quantity': cart_item.quantity,
         'amount': amount,
-        'total': amount + 200
+        'total': amount + 2
     }
     return jsonify(data)
 
@@ -104,40 +103,33 @@ def minus_cart():
 @login_required
 def remove_cart():
     from api.models import Cart
-    # Get the cart item ID from the request arguments
     cart_id = request.args.get('cart_id')
     if not cart_id:
         flash('Cart item ID is missing!')
         return redirect('/cart')
 
     try:
-        # Fetch the cart item by ID
         cart_item = Cart.query.get(cart_id)
 
-        # If the cart item doesn't exist, notify the user
         if not cart_item:
             flash('Cart item not found.')
             return redirect('/cart')
 
-        # Remove the item from the cart and commit the transaction
         db.session.delete(cart_item)
         db.session.commit()
 
-        # Recalculate the total and amount for the cart
         cart = Cart.query.filter_by(customer_link=current_user.id).all()
         amount = sum(item.product.current_price * item.quantity for item in cart)
 
         data = {
             'amount': amount,
-            'total': amount + 200  # Assuming 200 is a fixed shipping fee or other costs
+            'total': amount + 2  
         }
 
-        # Optionally, return a JSON response or redirect to the cart page
         flash('Item removed from cart.')
         return redirect('/cart')
 
     except Exception as e:
-        # Handle any unexpected errors
         print(f"Error removing item from cart: {e}")
         flash('An error occurred while removing the item from the cart.')
         return redirect('/cart')

@@ -87,9 +87,7 @@ def change_password(customer_id):
         new_password = form.new_password.data
         confirm_new_password = form.confirm_new_password.data
 
-        # Verify the current password
         if check_password_hash(current_user.password, current_password):
-            # Check if the new passwords match
             if new_password == confirm_new_password:
                 current_user.password = generate_password_hash(new_password)
                 db.session.commit()

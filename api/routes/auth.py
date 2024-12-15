@@ -1,12 +1,11 @@
-from flask import Blueprint, render_template, flash, redirect
+from flask import Blueprint, render_template, flash, redirect, url_for
 from api.models.forms import LoginForm, SignUpForm, PasswordChangeForm
 from api.models import Customer
-
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
+from werkzeug.security import check_password_hash, generate_password_hash
 from api import db
 
 auth = Blueprint('auth', __name__)
-
 
 @auth.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
@@ -21,21 +20,21 @@ def sign_up():
             new_customer = Customer()
             new_customer.email = email
             new_customer.username = username
-            new_customer.password = password2
+            new_customer.password = generate_password_hash(password2)
 
             try:
                 db.session.add(new_customer)
                 db.session.commit()
-                flash('Account Created Successfully, You can now Login')
-                return redirect('/auth/login')
+                flash('Account Created Successfully, You can now Login', "success")
+                return redirect(url_for('auth.login'))
             except Exception as e:
                 print(e)
-                flash('Account Not Created!!, Email already exists')
+                flash('Account Not Created! Email already exists.', "danger")
 
-            form.email.data = ''
-            form.username.data = ''
-            form.password1.data = ''
-            form.password2.data = ''
+        form.email.data = ''
+        form.username.data = ''
+        form.password1.data = ''
+        form.password2.data = ''
 
     return render_template('signup.html', form=form)
 
@@ -49,15 +48,11 @@ def login():
 
         customer = Customer.query.filter_by(email=email).first()
 
-        if customer:
-            if customer.verify_password(password=password):
-                login_user(customer)
-                return redirect('/')
-            else:
-                flash('Incorrect Email or Password')
-
+        if customer and customer.verify_password(password):
+            login_user(customer)
+            return redirect('/')
         else:
-            flash('Account does not exist please Sign Up')
+            flash('Incorrect Email or Password', "danger")
 
     return render_template('login.html', form=form)
 
@@ -72,38 +67,37 @@ def log_out():
 @auth.route('/profile/<int:customer_id>')
 @login_required
 def profile(customer_id):
-    customer = Customer.query.get(customer_id)
-    return render_template('profile.html', customer=customer)
+    if customer_id != current_user.id:
+        flash("Unauthorized access.", "danger")
+        return redirect(url_for('auth.profile', customer_id=current_user.id))
+
+    return render_template('profile.html', customer=current_user)
 
 
 @auth.route('/change-password/<int:customer_id>', methods=['GET', 'POST'])
 @login_required
 def change_password(customer_id):
-    from api.__init__ import db
+    if customer_id != current_user.id:
+        flash("Unauthorized access.", "danger")
+        return redirect(url_for('auth.profile', customer_id=current_user.id))
+
     form = PasswordChangeForm()
-    customer = Customer.query.get(customer_id)
     if form.validate_on_submit():
         current_password = form.current_password.data
         new_password = form.new_password.data
         confirm_new_password = form.confirm_new_password.data
 
-        if customer.verify_password(current_password):
+        # Verify the current password
+        if check_password_hash(current_user.password, current_password):
+            # Check if the new passwords match
             if new_password == confirm_new_password:
-                customer.password = confirm_new_password
+                current_user.password = generate_password_hash(new_password)
                 db.session.commit()
-                flash('Password Updated Successfully')
-                return redirect(f'/profile/{customer.id}')
+                flash("Password updated successfully.", "success")
+                return redirect(url_for('auth.profile', customer_id=current_user.id))
             else:
-                flash('New Passwords do not match!!')
-
+                flash("New passwords do not match.", "danger")
         else:
-            flash('Current Password is Incorrect')
+            flash("Current password is incorrect.", "danger")
 
     return render_template('change_password.html', form=form)
-
-
-
-
-
-
-

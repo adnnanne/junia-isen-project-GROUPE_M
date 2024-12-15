@@ -89,7 +89,7 @@ def change_password(customer_id):
                 current_user.password = generate_password_hash(new_password)
                 db.session.commit()
                 flash('Password Updated Successfully')
-                return redirect(f'/auth/profile/{customer.id}')
+                return redirect(f'/auth/profile/{current_user.id}')
             else:
                 flash("New passwords do not match.", "danger")
         else:

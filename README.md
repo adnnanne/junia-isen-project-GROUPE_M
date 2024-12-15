@@ -36,7 +36,7 @@ bash
    pip install -r api/requirements.txt
 2. Run the app
 bash
-   python api/app.py
+   python app.py
 ### 🧪 **Running the Tests Locally**
 1. Install pytest
     

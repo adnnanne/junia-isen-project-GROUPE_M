@@ -23,17 +23,18 @@ module "database" {
   sql_database_name   = var.sql_database_name
   admin_username      = var.admin_username
   admin_password      = var.admin_password
+
 }
 
-
 module "storage" {
-  source               = "./modules/storage"
-  resource_group_name  = azurerm_resource_group.rg.name
-  location             = azurerm_resource_group.rg.location
+  source              = "./modules/storage"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
   storage_account_name = var.storage_account_name
   storage_container_name = var.storage_container_name
-  storage_blob_name    = var.storage_blob_name
+  storage_blob_name  = var.storage_blob_name
   storage_blob_source  = var.storage_blob_source
+  
 }
 
 module "network" {
@@ -41,20 +42,4 @@ module "network" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   prefix              = var.prefix
-}
-
-module "monitoring" {
-  source = "./modules/monitoring"
-
-  resource_group_name          = azurerm_resource_group.rg.name
-  location                     = azurerm_resource_group.rg.location
-  log_analytics_workspace_name = var.log_analytics_workspace_name
-}
-
-
-module "monitoring" {
-  source              = "./modules/monitoring"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  log_analytics_workspace_name = var.log_analytics_workspace_name
 }

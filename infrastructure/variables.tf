@@ -56,3 +56,9 @@ variable "storage_blob_source" {
   type        = string
   default="admin"
 }
+
+variable "log_analytics_workspace_name" {
+  description = "The name of the Log Analytics Workspace."
+  type        = string
+  default     = "log-analytics"
+}
